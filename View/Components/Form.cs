@@ -8,22 +8,18 @@ namespace View.Components
 {
     public class Form<T>
     {
-        private T model;
+        private List<InputText<T>> inputs = new List<InputText<T>>();
 
-        public Form(T model)
+        public void AddInput(InputText<T> input)
         {
-            this.model = model;
+            inputs.Add(input);
         }
 
         public void Show()
         {
-            if (model!= null)
+            foreach (var input in inputs)
             {
-                foreach(var prop in model.GetType().GetProperties())
-                {
-                    Console.Write(prop.Name + ": ");
-                    prop.SetValue(model, Console.ReadLine());
-                }
+                input.Show();
             }
         }
     }

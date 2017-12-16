@@ -21,7 +21,7 @@ namespace View.Components
 
         public void Show()
         {
-            Console.WriteLine(text);
+            Console.Write(text);
             propertyBind.SetValue(model, Console.ReadLine());
         }
     }

@@ -30,7 +30,17 @@ namespace View
         public static void AddEmployee()
         {
             EmployeeVm emp = new EmployeeVm();
-            var form = new Form<EmployeeVm>(emp);
+            var form = new Form<EmployeeVm>();
+
+            foreach(var prop in emp.GetType().GetProperties())
+            {
+                switch(prop.Name.ToLower())
+                {
+                    case "hourlyrate": form.AddInput(new InputText<EmployeeVm>(emp, prop, "Valor por hora: R$")); break;
+                    case "hoursworked": form.AddInput(new InputText<EmployeeVm>(emp, prop, "Horas Trabalhadas: ")); break;
+                    case "country": form.AddInput(new InputText<EmployeeVm>(emp, prop, "País: ")); break;
+                }
+            }
 
             form.Show();
             Console.ReadKey();
