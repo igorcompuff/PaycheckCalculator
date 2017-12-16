@@ -1,4 +1,4 @@
-﻿namespace Model
+﻿namespace Domain.Interfaces
 {
     public interface IPrinter
     {

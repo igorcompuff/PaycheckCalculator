@@ -1,18 +1,12 @@
 ﻿using System.Collections.Generic;
 
-namespace Model
+namespace Domain
 {
     public class Paycheck
     {
         private readonly List<string> mDeductions = new List<string>();
-        public double GrossSalary { get; private set; }
-        public double NetSalary { get; private set; }
-
-        public Paycheck(double gross, double net)
-        {
-            GrossSalary = gross;
-            NetSalary = net;
-        }
+        public double GrossSalary { get; set; }
+        public double NetSalary { get; set; }
 
         public void AddDeduction(string deduction)
         {

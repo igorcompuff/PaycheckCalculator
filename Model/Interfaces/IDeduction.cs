@@ -1,8 +1,8 @@
-﻿namespace Model
+﻿namespace Domain.Interfaces
 {
     public interface IDeduction
     {
         string Description { get; set; }
-        double ApplyTo(double value);
+        double ApplyTo(ref double value);
     }
 }
