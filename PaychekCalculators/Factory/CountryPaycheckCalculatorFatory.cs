@@ -1,7 +1,7 @@
-﻿using Calculator.Concrete;
-using Domain;
+﻿using Domain;
+using PaychekCalculators.Concrete;
 
-namespace Calculator.Factory
+namespace PaychekCalculators.Factory
 {
     public abstract class CountryPaycheckCalculatorFatory
     {

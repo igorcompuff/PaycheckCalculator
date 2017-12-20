@@ -1,6 +1,6 @@
-﻿using Deduction;
+﻿using PaycheckDeductions;
 
-namespace Calculator.Concrete
+namespace PaychekCalculators.Concrete
 {
     public class GermanyPayCheckCalculator: CountryPaycheckCalculator
     {

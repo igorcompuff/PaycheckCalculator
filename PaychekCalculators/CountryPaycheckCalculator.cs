@@ -1,19 +1,19 @@
-﻿using Domain;
+﻿using System.Collections.Generic;
+using Domain;
 using Domain.Interfaces;
-using System.Collections.Generic;
 
-namespace Calculator
+namespace PaychekCalculators
 {
     public abstract class CountryPaycheckCalculator
     {
         private List<IDeduction> mDeductions = new List<IDeduction>();
         
-        public void AddDeduction(IDeduction deduction)
+        protected void AddDeduction(IDeduction deduction)
         {
             mDeductions.Add(deduction);
         }
 
-        public void RemoveDeduction(IDeduction deduction)
+        protected void RemoveDeduction(IDeduction deduction)
         {
             mDeductions.Remove(deduction);
         }
@@ -27,7 +27,7 @@ namespace Calculator
             return payCheck;
         }
 
-        public void CalculateNetSalary(Paycheck pc)
+        protected void CalculateNetSalary(Paycheck pc)
         {
             double totalDeductions = 0;
             double grossSalary = pc.GrossSalary;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace View.Components
+namespace ConsoleComponents
 {
     public class ConsoleMenu
     {
@@ -9,8 +9,7 @@ namespace View.Components
         {
             public string OptionCode { get; private set; }
             public string OptionDescription { get; private set; }
-            private Action optionAction;
-            private bool infinity;
+            private readonly Action optionAction;
 
             public ConsoleMenuOption(string optionCode, string optionDescription, Action optionAction = null)
             {
@@ -51,7 +50,10 @@ namespace View.Components
         {
             do
             {
-                Console.Clear();
+                if (infinity)
+                {
+                    Console.Clear();
+                }
                 foreach (var opt in options)
                 {
                     Console.WriteLine($"{opt.Value.OptionCode} - {opt.Value.OptionDescription}");
@@ -62,10 +64,11 @@ namespace View.Components
                 if (options.ContainsKey(selected))
                 {
                     options[selected].Execute();
+
                 }
                 else
                 {
-                    Console.WriteLine(OptionNotFoundMessage ?? "Operation invalid.");
+                    Console.WriteLine(OptionNotFoundMessage ?? "Invalid operation.");
                     Console.Write("Press any key to continue ...");
                     Console.ReadKey();
                 }

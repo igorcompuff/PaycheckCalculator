@@ -1,7 +1,7 @@
-﻿using Domain.Interfaces;
-using System;
+﻿using System;
+using Domain.Interfaces;
 
-namespace Deduction
+namespace PaycheckDeductions
 {
     public class UpToDeduction : IDeduction
     {
@@ -13,7 +13,7 @@ namespace Deduction
             this.limit = limit;
             this.tax = tax;
         }
-        public string Description { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string Description { get; set; }
 
         public double ApplyTo(ref double value)
         {

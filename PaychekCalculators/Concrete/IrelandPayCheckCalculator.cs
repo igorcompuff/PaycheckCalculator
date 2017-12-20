@@ -1,8 +1,8 @@
-﻿using Deduction;
+﻿using PaycheckDeductions;
 
-namespace Calculator.Concrete
+namespace PaychekCalculators.Concrete
 {
-    public class IrelandPayCheckCalculator: CountryPaycheckCalculator
+    public class IrelandPayCheckCalculator : CountryPaycheckCalculator
     {
         public IrelandPayCheckCalculator()
         {
@@ -26,7 +26,8 @@ namespace Calculator.Concrete
 
             socialDeduction.AddDeduction(new UpToDeduction(500, 0.07));
             socialDeduction.AddDeduction(new FlatDeduction(0.08));
-            socialDeduction.Description = "Universal Social Charge: 7% applied to the first €500 euro and 8% thereafter";
+            socialDeduction.Description =
+                "Universal Social Charge: 7% applied to the first €500 euro and 8% thereafter";
 
             AddDeduction(socialDeduction);
         }
@@ -38,4 +39,5 @@ namespace Calculator.Concrete
 
             AddDeduction(pensionDeduction);
         }
+    }
 }

@@ -1,14 +1,14 @@
-﻿using Domain.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Domain.Interfaces;
 
-namespace Deduction
+namespace PaycheckDeductions
 {
     public class ListDeduction: IDeduction
     {
         private List<IDeduction> mDeductions = new List<IDeduction>();
 
-        public string Description { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public string Description { get; set; }
 
         public void AddDeduction(IDeduction deduction)
         {
