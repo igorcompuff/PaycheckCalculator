@@ -5,10 +5,8 @@ using Domain;
 
 namespace DataAccess
 {
-    public class ReflectionFileStreamEmployeeRepository: BaseFileStreamEmployeeRepository
+    public class ReflectionFileStreamEmployeeRepository: FileStreamEmployeeRepository
     {
-        private readonly UTF8Encoding _encoding = new UTF8Encoding();
-
         public ReflectionFileStreamEmployeeRepository(string rootDirPath): base(rootDirPath)
         {
         }
@@ -29,12 +27,13 @@ namespace DataAccess
                     recordBuilder.Append($"{property.Name}: {property.GetValue(obj)}//");
                 }
 
-                byte[] bytes = _encoding.GetBytes(recordBuilder.ToString());
+                var encoding = new UTF8Encoding();
+                byte[] bytes = encoding.GetBytes(recordBuilder.ToString());
                 fstream.Write(bytes, 0, bytes.Length);
             }
         }
 
-        protected override Employee GetEmployee(FileInfo file)
+        protected override Employee Get(FileInfo file)
         {
             Employee employee = null;
 
@@ -51,10 +50,11 @@ namespace DataAccess
             return employee;
         }
 
-        private Employee DecodeEmployee(byte[] encodedEmployee)
+        private static Employee DecodeEmployee(byte[] encodedEmployee)
         {
             Employee employee = new Employee();
-            string[] fields = _encoding.GetString(encodedEmployee).Split(new[] { "//" }, StringSplitOptions.RemoveEmptyEntries);
+            var encoding = new UTF8Encoding();
+            string[] fields = encoding.GetString(encodedEmployee).Split(new[] { "//" }, StringSplitOptions.RemoveEmptyEntries);
 
             foreach (var field in fields)
             {

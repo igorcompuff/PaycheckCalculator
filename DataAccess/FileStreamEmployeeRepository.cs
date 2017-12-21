@@ -1,15 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Domain;
 
 namespace DataAccess
 {
-    public class SimpleFileStreamEmployeeRepository : BaseFileStreamEmployeeRepository
+    public class FileStreamEmployeeRepository : BaseFileStreamEmployeeRepository<Employee>
     {
-        private readonly UTF8Encoding _encoding = new UTF8Encoding();
-
-        public SimpleFileStreamEmployeeRepository(string rootDirPath): base(rootDirPath)
+        public FileStreamEmployeeRepository(string rootDirPath): base(rootDirPath)
         {
 
         }
@@ -31,12 +31,29 @@ namespace DataAccess
                 recordBuilder.Append($"{obj.HourlyRate}//");
                 recordBuilder.Append($"{obj.HoursWorked}");
 
-                byte[] bytes = _encoding.GetBytes(recordBuilder.ToString());
+                var encoding = new UTF8Encoding();
+                byte[] bytes = encoding.GetBytes(recordBuilder.ToString());
                 fstream.Write(bytes, 0, bytes.Length);
             }
         }
 
-        protected override Employee GetEmployee(FileInfo file)
+        public override IEnumerable<Employee> GetAll()
+        {
+            var employees = base.GetAll();
+            return employees.OrderBy(emp => emp.Id).ToList();
+        }
+
+        public override void Remove(Employee obj)
+        {
+            var file = new FileInfo(Path.Combine(BaseDataDirectory.FullName, $"{obj.Id}.dat"));
+
+            if (file.Exists)
+            {
+                file.Delete();
+            }
+        }
+
+        protected override Employee Get(FileInfo file)
         {
             Employee employee = null;
 
@@ -56,7 +73,8 @@ namespace DataAccess
         private Employee DecodeEmployee(byte[] encodedEmployee)
         {
             Employee employee = new Employee();
-            string[] fields = _encoding.GetString(encodedEmployee).Split(new[] { "//" }, StringSplitOptions.RemoveEmptyEntries);
+            var encoding = new UTF8Encoding();
+            string[] fields = encoding.GetString(encodedEmployee).Split(new[] { "//" }, StringSplitOptions.RemoveEmptyEntries);
 
             try
             {

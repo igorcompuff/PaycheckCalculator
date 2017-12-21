@@ -41,12 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseFileStreamEmployeeRepository.cs" />
+    <Compile Include="BaseFileStreamRepository.cs" />
     <Compile Include="MemoryEmployeeRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionFileStreamEmployeeRepository.cs" />
     <Compile Include="SerializationFileStreamEmployeeRepository.cs" />
-    <Compile Include="SimpleFileStreamEmployeeRepository.cs" />
+    <Compile Include="FileStreamEmployeeRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj">

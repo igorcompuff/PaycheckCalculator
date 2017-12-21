@@ -4,7 +4,7 @@ using Domain;
 
 namespace DataAccess
 {
-    public class SerializationFileStreamEmployeeRepository : BaseFileStreamEmployeeRepository
+    public class SerializationFileStreamEmployeeRepository : FileStreamEmployeeRepository
     {
         private readonly BinaryFormatter _formatter = new BinaryFormatter();
 
@@ -23,7 +23,7 @@ namespace DataAccess
             }
         }
 
-        protected override Employee GetEmployee(FileInfo file)
+        protected override Employee Get(FileInfo file)
         {
             Employee employee = null;
 
