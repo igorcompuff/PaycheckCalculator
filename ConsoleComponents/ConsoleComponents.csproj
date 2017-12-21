@@ -48,6 +48,7 @@
     <Compile Include="ConsoleMenu.cs" />
     <Compile Include="ConsoleMessage.cs" />
     <Compile Include="Form.cs" />
+    <Compile Include="IComponent.cs" />
     <Compile Include="InputText.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

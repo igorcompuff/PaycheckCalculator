@@ -3,74 +3,95 @@ using Domain;
 using Mvc.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Mvc.View
 {
     public class EmployeeView
     {
-        public static EmployeeVm RequestDataToAdd()
+        public static EmployeeVm ShowAddEmployeeView()
         {
-            EmployeeVm emp = new EmployeeVm();
-            var form = new Form<EmployeeVm>();
+            EmployeeVm employee = new EmployeeVm();
+            var form = new Form();
 
-            form.AddInput(new BindInputText<EmployeeVm>("Nome: ", emp, "Name", Employee.ValidateName));
-            form.AddInput(new BindInputText<EmployeeVm>("Valor por hora: R$", emp, "HourlyRate", Employee.ValidateHourlyRate));
-            form.AddInput(new BindInputText<EmployeeVm>("Horas trabalhadas: ", emp, "HoursWorked", Employee.ValidateHourlyRate));
-            form.AddInput(new BindInputText<EmployeeVm>("País: ", emp, "Country", Employee.ValidateCountry));
+            form.AddComponent(new BindInputText<EmployeeVm>("Nome: ", employee, "Name", Employee.ValidateName));
+            form.AddComponent(new BindInputText<EmployeeVm>("Valor por hora: R$", employee, "HourlyRate", Employee.ValidateHourlyRate));
+            form.AddComponent(new BindInputText<EmployeeVm>("Horas trabalhadas: ", employee, "HoursWorked", Employee.ValidateHoursWorked));
+            form.AddComponent(new BindInputText<EmployeeVm>("País: ", employee, "Country", Employee.ValidateCountry));
             Console.WriteLine();
             form.Show();
 
-            return emp;
+            var confirmation = new ConsoleConfirmation("\nRevise as informações abaixo sobre o funcionário.\n\n" + employee + "\nConfirmar?");
+            confirmation.Show();
+
+            if (!confirmation.Confirmed)
+            {
+                employee = null;
+            }
+
+            return employee;
         }
 
-        public static bool RequestConfirmation(EmployeeVm emp)
+        public static bool ShowAlterEmployeeView(EmployeeVm employee)
         {
-            ConsoleMessage.ShowMessage("Revise as informações abaixo sobre o funcionário.\n");
-            ConsoleMessage.ShowMessage(emp.ToString());
+            RequestAlteration(employee, "Nome: ", employee.Name, "Name", Employee.ValidateName);
+            RequestAlteration(employee, "Valor por hora: R$", employee.HourlyRate, "HourlyRate", Employee.ValidateHourlyRate);
+            RequestAlteration(employee, "Horas trabalhadas: ", employee.HoursWorked, "HoursWorked", Employee.ValidateHoursWorked);
+            RequestAlteration(employee, "País: ", employee.Country, "Country", Employee.ValidateCountry);
 
-            return ConsoleConfirmation.Show("Confirmar?");
+            var confirmation = new ConsoleConfirmation("\nRevise as informações abaixo sobre o funcionário.\n\n" + employee + "\nConfirmar?");
+            confirmation.Show();
+
+            return confirmation.Confirmed;
         }
 
         private static void RequestAlteration(EmployeeVm emp, string text, string value, string property, InputText.InputValidator validator)
         {
-            ConsoleMessage.ShowMessage(text + value);
-            if (ConsoleConfirmation.Show("Alterar?"))
+            var conMessage = new ConsoleMessage(text + value);
+            conMessage.Show();
+
+            var confirmation = new ConsoleConfirmation("Alterar?");
+            confirmation.Show();
+            if (confirmation.Confirmed)
             {
                 new BindInputText<EmployeeVm>(text, emp, property, validator).Show();
             }
         }
-        public static void RequestAlteration(EmployeeVm emp)
-        {
-            RequestAlteration(emp, "Nome: ", emp.Name, "Name", Employee.ValidateName);
-            RequestAlteration(emp, "Valor por hora: R$", emp.HourlyRate, "HourlyRate", Employee.ValidateHourlyRate);
-            RequestAlteration(emp, "Horas trabalhadas: ", emp.HoursWorked, "HoursWorked", Employee.ValidateHoursWorked);
-            RequestAlteration(emp, "País: ", emp.Country, "Country", Employee.ValidateCountry);
-        }
 
         public static int RequestId()
         {
-            return int.Parse(new InputText("Entre com o Id do funcionário a ser alterado:", Employee.ValidateId).Show());
+            var input = new InputText("Entre com o Id do funcionário a ser alterado:", Employee.ValidateId);
+            input.Show();
+            return int.Parse(input.InputData);
         }
 
         public static void ListEmployees(IEnumerable<EmployeeVm> employees)
         {
-            ConsoleMessage.ShowMessage("################### Lista de funcionários. ###################\n");
+            var builder = new StringBuilder();
+
+            builder.Append("################### Lista de funcionários. ###################\n");
+
             foreach (var employee in employees)
             {
-                ConsoleMessage.ShowMessage(employee.ToString());
+                builder.Append(employee);
             }
 
-            ConsoleMessage.ShowMessage(string.Empty, true, "Pressione qualquer tecla para continuar...");
+            builder.Append("\n");
+
+            var conMessage = new ConsoleMessage(builder.ToString(), true);
+            conMessage.Show();
         }
 
-        public static void ShowErrorMessage(string message)
+        public static void ShowMessage(string message)
         {
-            ConsoleMessage.ShowMessage(message, true);
+            var conMessage = new ConsoleMessage(message, true);
+            conMessage.Show();
         }
 
         public static void ShowPaycheck(Paycheck paycheck)
         {
-            ConsoleMessage.ShowMessage(paycheck.ToString(), true);
+            var conMessage = new ConsoleMessage(paycheck.ToString(), true);
+            conMessage.Show();
         }
     }
 }

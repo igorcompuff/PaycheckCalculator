@@ -4,38 +4,40 @@ using Domain.Interfaces;
 
 namespace ConsoleComponents
 { 
-    public class InputText
+    public class InputText: IComponent
     {
         public delegate bool InputValidator(string valueToCheck, out string errorMessage);
 
-        private string _text;
-        private InputValidator _validator;
+        private readonly string _label;
+        private readonly InputValidator _validator;
 
+        public string InputData { get; set; }
 
-        public InputText(string text, InputValidator validator = null)
+        public InputText(string label, InputValidator validator = null)
         {
-            _text = text;
+            _label = label;
             _validator = validator;
         }
 
-        public virtual string Show()
+        public virtual void Show()
         {
-            Console.Write(_text);
-            string value = Console.ReadLine();
+            Console.Write(_label);
+            var value = Console.ReadLine();
 
             if (_validator != null)
             {
-                string errorMessage;
-                bool valid = _validator(value, out errorMessage);
+                bool valid = _validator(value, out var errorMessage);
 
                 if (!valid)
                 {
                     Console.WriteLine(errorMessage);
-                    value = Show();
+                    Show();
+                }
+                else
+                {
+                    InputData = value;
                 }
             }
-
-            return value;
         }
     }
 }

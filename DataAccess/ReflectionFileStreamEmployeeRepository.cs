@@ -5,13 +5,12 @@ using Domain;
 
 namespace DataAccess
 {
-    public class SimpleFileStreamEmployeeRepository : BaseFileStreamEmployeeRepository
+    public class ReflectionFileStreamEmployeeRepository: BaseFileStreamEmployeeRepository
     {
         private readonly UTF8Encoding _encoding = new UTF8Encoding();
 
-        public SimpleFileStreamEmployeeRepository(string rootDirPath): base(rootDirPath)
+        public ReflectionFileStreamEmployeeRepository(string rootDirPath): base(rootDirPath)
         {
-
         }
 
         public override void Add(Employee obj)
@@ -25,11 +24,10 @@ namespace DataAccess
             {
                 StringBuilder recordBuilder = new StringBuilder();
 
-                recordBuilder.Append($"{obj.Id}//");
-                recordBuilder.Append($"{obj.Name}//");
-                recordBuilder.Append($"{obj.Country}//");
-                recordBuilder.Append($"{obj.HourlyRate}//");
-                recordBuilder.Append($"{obj.HoursWorked}");
+                foreach (var property in obj.GetType().GetProperties())
+                {
+                    recordBuilder.Append($"{property.Name}: {property.GetValue(obj)}//");
+                }
 
                 byte[] bytes = _encoding.GetBytes(recordBuilder.ToString());
                 fstream.Write(bytes, 0, bytes.Length);
@@ -58,17 +56,34 @@ namespace DataAccess
             Employee employee = new Employee();
             string[] fields = _encoding.GetString(encodedEmployee).Split(new[] { "//" }, StringSplitOptions.RemoveEmptyEntries);
 
-            try
+            foreach (var field in fields)
             {
-                employee.Id = int.Parse(fields[0]);
-                employee.Name = fields[1];
-                employee.Country = fields[2];
-                employee.HourlyRate = double.Parse(fields[3]);
-                employee.HoursWorked = int.Parse(fields[4]);
-            }
-            catch (Exception e)
-            {
-                throw new InvalidOperationException("The database is corrupted", e);
+                string[] fieldDecomposed = field.Split(':');
+
+                var property = employee.GetType().GetProperty(fieldDecomposed[0]);
+
+                if (property == null)
+                {
+                    throw new InvalidOperationException("The database is corrupted");
+                }
+
+                object propertyValue;
+
+                if (property.PropertyType == typeof(int))
+                {
+                    propertyValue = int.Parse(fieldDecomposed[1]);
+
+                }
+                else if (property.PropertyType == typeof(double))
+                {
+                    propertyValue = double.Parse(fieldDecomposed[1]);
+                }
+                else
+                {
+                    propertyValue = fieldDecomposed[1];
+                }
+
+                property.SetValue(employee, propertyValue);
             }
 
             return employee;

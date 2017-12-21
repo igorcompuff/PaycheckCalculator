@@ -5,10 +5,10 @@ namespace ConsoleComponents
 {
     public class BindInputText<T>: InputText
     {
-        private T _model;
-        private PropertyInfo _property;
+        private readonly T _model;
+        private readonly PropertyInfo _property;
 
-        public BindInputText(string text, T model, string propertyName, InputValidator validator):base(text, validator)
+        public BindInputText(string label, T model, string propertyName, InputValidator validator):base(label, validator)
         {
             if (model == null || string.IsNullOrEmpty(propertyName))
             {
@@ -19,11 +19,10 @@ namespace ConsoleComponents
             _model = model;
         }
 
-        public override string Show()
+        public override void Show()
         {
-            string value = base.Show();
-            _property.SetValue(_model, value);
-            return value;
+            base.Show();
+            _property.SetValue(_model, InputData);
         }
     }
 }

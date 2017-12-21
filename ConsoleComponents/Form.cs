@@ -2,13 +2,13 @@
 
 namespace ConsoleComponents
 {
-    public class Form<T>
+    public class Form: IComponent
     {
-        private List<InputText> inputs = new List<InputText>();
+        private List<IComponent> inputs = new List<IComponent>();
 
-        public void AddInput(InputText input)
+        public void AddComponent(IComponent component)
         {
-            inputs.Add(input);
+            inputs.Add(component);
         }
 
         public void Show()

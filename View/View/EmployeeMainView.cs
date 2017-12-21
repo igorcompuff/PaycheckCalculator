@@ -29,7 +29,7 @@ namespace Mvc.View
 
         static void Main(string[] args)
         {
-            new EmployeeMainView(new EmployeeController(new SerializationFileStreamEmployeeRepository(@"\\Mac\Home\Desktop"))).ShowMenu();
+            new EmployeeMainView(new EmployeeController(new ReflectionFileStreamEmployeeRepository(@"\\Mac\Home\Desktop"))).ShowMenu();
         }
     }
 }

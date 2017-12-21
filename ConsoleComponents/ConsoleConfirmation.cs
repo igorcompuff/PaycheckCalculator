@@ -2,17 +2,22 @@
 
 namespace ConsoleComponents
 {
-    public class ConsoleConfirmation
+    public class ConsoleConfirmation: IComponent
     {
-        public string ConfirmMessage { get; set; }
+        private readonly string _message;
+        public bool Confirmed { get; set; }
 
-        public static bool Show(string message)
+        public ConsoleConfirmation(string message)
         {
-            Console.Write(message);
+            _message = message;
+        }
+        public void Show()
+        {
+            Console.Write(_message);
             Console.Write(" (S/N): ");
             string opt = Console.ReadLine();
 
-            return opt.ToLower().Equals("s");
+            Confirmed = opt?.ToLower().Equals("s") ?? false;
         }
     }
 }

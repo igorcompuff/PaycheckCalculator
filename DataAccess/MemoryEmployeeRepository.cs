@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Domain;
 using Domain.Interfaces;
 
@@ -21,7 +18,7 @@ namespace DataAccess
             }
             else
             {
-                Employee employeeToAlter = employees.First(emp => emp.Id == employee.Id);
+                Employee employeeToAlter = GetById(employee.Id);
 
                 if (employeeToAlter != null)
                 {

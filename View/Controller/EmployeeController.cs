@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Domain;
 using Domain.Interfaces;
 using Mvc.View;
@@ -10,7 +11,7 @@ namespace Mvc.Controller
 {
     public class EmployeeController
     {
-        private IRepository<Employee> _repository;
+        private readonly IRepository<Employee> _repository;
 
         public EmployeeController(IRepository<Employee> repository)
         {
@@ -18,13 +19,21 @@ namespace Mvc.Controller
         }
         public void AddEmployee()
         {
-            EmployeeVm employee = EmployeeView.RequestDataToAdd();
+            EmployeeVm employee = EmployeeView.ShowAddEmployeeView();
 
-            if (EmployeeView.RequestConfirmation(employee))
+            if (employee != null)
             {
                 var domainEmployee = new Employee(){Name = employee.Name, Country = employee.Country, HoursWorked = int.Parse(employee.HoursWorked), HourlyRate = double.Parse(employee.HourlyRate)};
 
-                _repository.Add(domainEmployee);
+                try
+                {
+                    _repository.Add(domainEmployee);
+                    EmployeeView.ShowMessage("Funcionário adicionado com sucesso.");
+                }
+                catch (Exception e)
+                {
+                    EmployeeView.ShowMessage("Erro ao adicionar o funcionário.");
+                }
             }
         }
 
@@ -36,17 +45,28 @@ namespace Mvc.Controller
             if (employee != null)
             {
                 EmployeeVm employeeVm = new EmployeeVm(){Name = employee.Name, Country = employee.Country, HourlyRate = employee.HourlyRate.ToString(), HoursWorked = employee.HoursWorked.ToString()};
-                EmployeeView.RequestAlteration(employeeVm);
-
-                if (EmployeeView.RequestConfirmation(employeeVm))
+                
+                if (EmployeeView.ShowAlterEmployeeView(employeeVm))
                 {
                     employee.Name = employeeVm.Name;
                     employee.Country = employeeVm.Country;
                     employee.HourlyRate = double.Parse(employeeVm.HourlyRate);
                     employee.HoursWorked = int.Parse(employeeVm.HoursWorked);
 
-                    _repository.Add(employee);
+                    try
+                    {
+                        _repository.Add(employee);
+                        EmployeeView.ShowMessage("Funcionário alterado com sucesso.");
+                    }
+                    catch (Exception e)
+                    {
+                        EmployeeView.ShowMessage("Erro ao alterar o Funcionário.");
+                    }
                 }
+            }
+            else
+            {
+                EmployeeView.ShowMessage("Funcionário não encontrado.");
             }
         }
 
@@ -71,10 +91,11 @@ namespace Mvc.Controller
             if (employee != null)
             {
                 _repository.Remove(employee);
+                EmployeeView.ShowMessage("Funcionário removido com sucesso");
             }
             else
             {
-                EmployeeView.ShowErrorMessage("Funcionário não encontrado.");
+                EmployeeView.ShowMessage("Funcionário não encontrado.");
             }
         }
 
@@ -94,12 +115,12 @@ namespace Mvc.Controller
                 }
                 else
                 {
-                    EmployeeView.ShowErrorMessage($"O país {employee.Country} não é suportado para cálculo de olerite.");
+                    EmployeeView.ShowMessage($"O país {employee.Country} não é suportado para cálculo de olerite.");
                 }
             }
             else
             {
-                EmployeeView.ShowErrorMessage("Funcionário não encontrado.");
+                EmployeeView.ShowMessage("Funcionário não encontrado.");
             }
         }
     }

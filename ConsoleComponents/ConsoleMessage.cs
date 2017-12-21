@@ -2,15 +2,24 @@
 
 namespace ConsoleComponents
 {
-    public class ConsoleMessage
+    public class ConsoleMessage: IComponent
     {
-        public static void ShowMessage(string message, bool blocking = false, string blockMessage = "")
-        {
-            Console.WriteLine(message);
+        private readonly string _message;
+        private readonly bool _blocking;
 
-            if (blocking)
+        public ConsoleMessage(string message, bool blocking = false)
+        {
+            _message = message;
+            _blocking = blocking;
+        }
+
+        public void Show()
+        {
+            Console.WriteLine(_message);
+
+            if (_blocking)
             {
-                Console.WriteLine(blockMessage);
+                Console.WriteLine("Pressione qualquer tecla para continuar...");
                 Console.ReadKey();
             }
         }
