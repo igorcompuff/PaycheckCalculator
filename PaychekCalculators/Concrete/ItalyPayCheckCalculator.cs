@@ -19,8 +19,8 @@ namespace PaychekCalculators.Concrete
         private void AddInpsDeduction()
         {
             var inpsDeduction = new ListDeduction();
-            inpsDeduction.AddDeduction(new UpToDeduction(500, 0.09));
-            inpsDeduction.AddDeduction(new MultiStepDeduction(100, 0.001));
+            inpsDeduction.AddDeduction(new LimitDeduction(500, 0.09));
+            inpsDeduction.AddDeduction(new FixedPartDeduction(100, 0.001));
             inpsDeduction.Description = "INPS contribution applied on the gross salary. This is charged at 9% for the first €500 and increases by .1% over every €100 thereafter.";
             AddDeduction(inpsDeduction);
         }

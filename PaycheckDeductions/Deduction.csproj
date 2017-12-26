@@ -43,9 +43,9 @@
   <ItemGroup>
     <Compile Include="FlatDeduction.cs" />
     <Compile Include="ListDeduction.cs" />
-    <Compile Include="MultiStepDeduction.cs" />
+    <Compile Include="FixedPartDeduction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UpToDeduction.cs" />
+    <Compile Include="LimitDeduction.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj">

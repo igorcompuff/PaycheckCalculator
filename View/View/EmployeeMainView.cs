@@ -2,6 +2,7 @@
 using DataAccess;
 using Mvc.Controller;
 using System;
+using Domain;
 
 namespace Mvc.View
 {
@@ -29,7 +30,7 @@ namespace Mvc.View
 
         static void Main(string[] args)
         {
-            new EmployeeMainView(new EmployeeController(new ReflectionFileStreamEmployeeRepository(@"\\Mac\Home\Desktop"))).ShowMenu();
+            new EmployeeMainView(new EmployeeController(new SerializationFileStreamEntityRepository<Employee>(@"\\Mac\Home\Desktop"))).ShowMenu();
         }
     }
 }

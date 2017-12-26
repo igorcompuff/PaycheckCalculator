@@ -2,7 +2,7 @@
 
 namespace Domain.Interfaces
 {
-    public interface IRepository<T>
+    public interface IRepository<T> where T: IEntity
     {
         void Add(T obj);
         void Remove(T obj);

@@ -15,7 +15,7 @@ namespace PaychekCalculators.Concrete
         {
             var incomeDeduction = new ListDeduction();
 
-            incomeDeduction.AddDeduction(new UpToDeduction(600, 0.25));
+            incomeDeduction.AddDeduction(new LimitDeduction(600, 0.25));
             incomeDeduction.AddDeduction(new FlatDeduction(0.4));
             incomeDeduction.Description = "Income Tax: 25% for the first €600 and 40% thereafter";
         }
@@ -24,7 +24,7 @@ namespace PaychekCalculators.Concrete
         {
             var socialDeduction = new ListDeduction();
 
-            socialDeduction.AddDeduction(new UpToDeduction(500, 0.07));
+            socialDeduction.AddDeduction(new LimitDeduction(500, 0.07));
             socialDeduction.AddDeduction(new FlatDeduction(0.08));
             socialDeduction.Description =
                 "Universal Social Charge: 7% applied to the first €500 euro and 8% thereafter";
