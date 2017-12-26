@@ -44,9 +44,9 @@ namespace DataAccess
             fs.Write(bytes, 0, bytes.Length);
         }
 
-        private Employee DecodeEmployee(byte[] encodedEmployee)
+        private static Employee DecodeEmployee(byte[] encodedEmployee)
         {
-            Employee employee = new Employee();
+            var employee = new Employee();
             var encoding = new UTF8Encoding();
             string[] fields = encoding.GetString(encodedEmployee).Split(new[] { "//" }, StringSplitOptions.RemoveEmptyEntries);
 

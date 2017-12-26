@@ -74,9 +74,8 @@ namespace Mvc.View
             foreach (var employee in employees)
             {
                 builder.Append(employee);
+                builder.Append("\n");
             }
-
-            builder.Append("\n");
 
             var conMessage = new ConsoleMessage(builder.ToString(), true);
             conMessage.Show();

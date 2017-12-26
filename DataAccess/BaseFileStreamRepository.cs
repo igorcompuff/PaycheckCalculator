@@ -7,12 +7,18 @@ namespace DataAccess
 {
     public abstract class BaseFileStreamRepository<T>: IRepository<T> where T : IEntity
     {
-        public DirectoryInfo BaseDataDirectory { get; private set; }
-        public DirectoryInfo RootDirectory { get; private set; }
+        private int _nextId = 0;
+        protected DirectoryInfo BaseDataDirectory { get; private set; }
+        protected DirectoryInfo RootDirectory { get; private set; }
+        protected FileInfo IdFile { get; private set; }
+
         protected BaseFileStreamRepository(string rootDirPath)
         {
             CreateRootDirectory(rootDirPath);
             CreateDataBaseDirectory();
+            IdFile = new FileInfo(Path.Combine(BaseDataDirectory.FullName, $"id.dat"));
+            GetNextId();
+
         }
         private void CreateRootDirectory(string baseDirPath)
         {
@@ -28,15 +34,36 @@ namespace DataAccess
             BaseDataDirectory = RootDirectory.CreateSubdirectory(typeof(T).Name);
         }
 
+        protected void GetNextId()
+        {
+            if (!IdFile.Exists) return;
+
+            using (var stream = IdFile.OpenText())
+            {
+                var idstr = stream.ReadLine();
+                _nextId = idstr != null ? int.Parse(idstr) : _nextId;
+            }
+        }
+
+        protected void UpdateId()
+        {
+            using (var stream = IdFile.CreateText())
+            {
+                stream.Write(_nextId.ToString());
+            }
+        }
+
         public void Add(T obj)
         {
-            obj.Id = obj.Id < 0 ? BaseDataDirectory.GetFiles().Length : obj.Id;
+            obj.Id = obj.Id < 0 ? _nextId++ : obj.Id;
             var file = new FileInfo(Path.Combine(BaseDataDirectory.FullName, $"{obj.Id}.dat"));
 
             using (var fstream = file.Open(FileMode.Create, FileAccess.Write))
             {
                 Save(fstream, obj);
             }
+
+            UpdateId();
         }
 
         protected abstract void Save(FileStream fs, T obj);
@@ -56,6 +83,8 @@ namespace DataAccess
 
             foreach (var employeeFile in BaseDataDirectory.GetFiles())
             {
+                if (employeeFile.Name.Equals(IdFile.Name)) continue;
+
                 var employee = Get(employeeFile);
 
                 if (employee != null)

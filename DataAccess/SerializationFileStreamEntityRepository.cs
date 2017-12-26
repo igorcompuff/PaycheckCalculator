@@ -1,5 +1,8 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
+using Domain;
 using Domain.Interfaces;
 
 namespace DataAccess
@@ -20,6 +23,13 @@ namespace DataAccess
         protected override T GetEntity(FileStream fs)
         {
             return (T)_formatter.Deserialize(fs);
+        }
+
+        public override IEnumerable<T> GetAll()
+        {
+            var entities = base.GetAll();
+
+            return entities.OrderBy(emp => emp.Id).ToList();
         }
     }
 }
